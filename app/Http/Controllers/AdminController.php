@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -93,5 +94,36 @@ class AdminController extends Controller
         $id = Auth::guard('admin')->id();
         $profileData = Admin::find($id);
         return view('admin.admin_profile', compact('profileData'));
+    }
+
+    public function AdminProfileStore(Request $request) {
+        $id = Auth::guard('admin')->id();
+        $data = Admin::findOrFail($id);
+
+        // update field basic
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->address = $request->address;
+
+        // simpan nama file lama
+        $oldPhotoPath = $data->photo;
+
+        if ($request->hasFile('photo')) {
+            // simpan ke storage/app/public/admin_images
+            $path = $request->file('photo')->store('admin_images', 'public');
+
+            // update field di database
+            $data->photo = $path;
+
+            // hapus foto lama kalau ada
+            if ($oldPhotoPath && Storage::disk('public')->exists($oldPhotoPath)) {
+                Storage::disk('public')->delete($oldPhotoPath);
+            }
+        }
+
+        $data->save();
+
+        return redirect()->back()->with('success', 'Profile updated successfully');
     }
 }
