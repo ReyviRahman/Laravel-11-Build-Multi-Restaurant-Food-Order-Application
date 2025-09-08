@@ -2,28 +2,27 @@
 <html lang="en">
 
     <head>
+      <meta charset="utf-8" />
+      <title>Admin Dashboard</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+      <meta content="Themesbrand" name="author" />
+      <!-- App favicon -->
+      <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.ico') }}">
 
-        <meta charset="utf-8" />
-        <title>Admin Dashboard</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-        <meta content="Themesbrand" name="author" />
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.ico') }}">
+      <!-- plugin css -->
+      <link href="{{ asset('backend/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}" rel="stylesheet" type="text/css" />
 
-        <!-- plugin css -->
-        <link href="{{ asset('backend/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}" rel="stylesheet" type="text/css" />
+      <!-- preloader css -->
+      <link rel="stylesheet" href="{{ asset('backend/assets/css/preloader.min.css') }}" type="text/css" />
 
-        <!-- preloader css -->
-        <link rel="stylesheet" href="{{ asset('backend/assets/css/preloader.min.css') }}" type="text/css" />
-
-        <!-- Bootstrap Css -->
-        <link href="{{ asset('backend/assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
-        <!-- Icons Css -->
-        <link href="{{ asset('backend/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-        <!-- App Css-->
-        <link href="{{ asset('backend/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
-
+      <!-- Bootstrap Css -->
+      <link href="{{ asset('backend/assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+      <!-- Icons Css -->
+      <link href="{{ asset('backend/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+      <!-- App Css-->
+      <link href="{{ asset('backend/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     </head>
 
     <body>
@@ -73,28 +72,30 @@
         <script src="{{ asset('backend/assets/js/pages/dashboard.init.js') }}"></script>
 
         <script src="{{ asset('backend/assets/js/app.js') }}"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+        <script>
+         @if(Session::has('message'))
+         var type = "{{ Session::get('alert_type','info') }}"
+         switch(type){
+            case 'info':
+            toastr.info(" {{ Session::get('message') }} ");
+            break;
+        
+            case 'success':
+            toastr.success(" {{ Session::get('message') }} ");
+            break;
+        
+            case 'warning':
+            toastr.warning(" {{ Session::get('message') }} ");
+            break;
+        
+            case 'error':
+            toastr.error(" {{ Session::get('message') }} ");
+            break; 
+         }
+         @endif 
+        </script>
     </body>
 
 </html>
-
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Admin Dashboard Page</title>
-</head>
-<body>
-  <h1>Admin Dashboard</h1>
-  @if (Session::has('error'))
-    <li>{{ Session::get('error') }}</li>
-  @endif
-  @if (Session::has('success'))
-    <li>{{ Session::get('success') }}</li>
-  @endif
-
-  <a href="{{ route('admin.logout') }}">Logout</a>
-</body>
-</html> --}}

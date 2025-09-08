@@ -123,7 +123,42 @@ class AdminController extends Controller
         }
 
         $data->save();
-
-        return redirect()->back()->with('success', 'Profile updated successfully');
+        $notification = [
+            'message'    => 'Profile updated successfully',
+            'alert_type' => 'success',
+        ];
+        return redirect()->back()->with($notification);
     }
+
+    public function AdminChangePassword() {
+        $id = Auth::guard('admin')->id();
+        $profileData = Admin::find($id);
+        return view('admin.admin_change_password', compact('profileData'));
+    }
+
+    public function AdminPasswordUpdate(Request $request) {
+        $admin = Auth::guard('admin')->user();
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|confirmed',
+        ]);
+
+        if (!Hash::check($request->old_password, $admin->password)) {
+            $notification = [
+                'message'    => 'Old Password Does Not Match!',
+                'alert_type' => 'error',
+            ];
+            return redirect()->back()->with($notification);
+        }
+
+        Admin::whereId($admin->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        $notification = [
+            'message'    => 'Password Change Successfully!',
+            'alert_type' => 'success',
+        ];
+        return redirect()->back()->with($notification);
+    }   
 }
