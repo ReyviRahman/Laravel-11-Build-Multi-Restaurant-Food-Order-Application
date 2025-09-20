@@ -2,7 +2,6 @@
 <html lang="en">
 
     <head>
-
         <meta charset="utf-8" />
         <title>Client Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,7 +68,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                         @endif
-                                        <form class="mt-4 pt-2" action="{{ route('admin.login_submit') }}" method="post">
+                                        <form class="mt-4 pt-2" action="{{ route('client.login_submit') }}" method="post">
                                             @csrf
                                             <div class="mb-3">
                                                 <label class="form-label">Email</label>

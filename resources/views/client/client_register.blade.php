@@ -20,6 +20,8 @@
         <link href="{{ asset('backend/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="{{ asset('backend/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     </head>
 
     <body>
@@ -69,7 +71,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                         @endif
-                                        <form class="mt-4 pt-2" action="{{ route('admin.login_submit') }}" method="post">
+                                        <form class="mt-4 pt-2" action="{{ route('client.register.submit') }}" method="post">
                                             @csrf
                                             <div class="mb-3">
                                                 <label class="form-label">Restaurant Name</label>
@@ -269,8 +271,30 @@
             <!-- end container fluid -->
         </div>
 
-
         <!-- JAVASCRIPT -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script>
+            @if(Session::has('message'))
+            var type = "{{ Session::get('alert_type','info') }}"
+            switch(type){
+                case 'info':
+                toastr.info(" {{ Session::get('message') }} ");
+                break;
+            
+                case 'success':
+                toastr.success(" {{ Session::get('message') }} ");
+                break;
+            
+                case 'warning':
+                toastr.warning(" {{ Session::get('message') }} ");
+                break;
+            
+                case 'error':
+                toastr.error(" {{ Session::get('message') }} ");
+                break; 
+            }
+            @endif 
+        </script>
         <script src="{{ asset('backend/assets/libs/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('backend/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('backend/assets/libs/metismenu/metisMenu.min.js') }}"></script>
