@@ -40,7 +40,7 @@
                                     <div class="auth-content my-auto">
                                         <div class="text-center">
                                             <h5 class="mb-0">Welcome Back !</h5>
-                                            <p class="text-muted mt-2">Sign in to continue to Minia.</p>
+                                            <p class="text-muted mt-2">Sign in to continue to Food Onlen.</p>
                                         </div>
                                         {{-- Error Validation --}}
                                         @if ($errors->any())
@@ -272,3 +272,5 @@
     </body>
 
 </html>
+
+!
