@@ -1,4 +1,7 @@
 @extends('frontend.master')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 @php
   $id = Auth::user()->id;
   $profileData = App\Models\User::find($id);
@@ -15,7 +18,7 @@
                 <h4 class="font-weight-bold mt-0 mb-4">User Profile</h4>
                 <div class="bg-white card mb-4 order-list shadow-sm">
                   <div class="gold-members p-4">
-                    <form action="{{ route('client.profile.update') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('user.profile.update') }}" method="post" enctype="multipart/form-data">
                       @csrf
                       @method('PUT')
                       <div class="row">
@@ -56,8 +59,7 @@
                                   <div class="mb-3">
                                     <img id="showImage" src="{{ !empty($profileData->photo)
     ? asset('storage/' . $profileData->photo)
-    : asset('upload/no_image.jpg') }}" alt=""
-                                      class="rounded-circle p-1 bg-primary" width="110">
+    : asset('upload/no_image.jpg') }}" alt="" class="rounded-circle p-1 bg-primary" width="110">
                                   </div>
                                   <div class="mt-4">
                                     <button type="submit" class="btn btn-primary waves-effect waves-light">Save
@@ -258,4 +260,16 @@
       </div>
     </div>
   </section>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#image').change(function (e) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#showImage').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(e.target.files['0'])
+      })
+    })
+  </script>
 @endsection

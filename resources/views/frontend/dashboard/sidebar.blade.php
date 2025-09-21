@@ -1,23 +1,31 @@
+@php
+  $id = Auth::user()->id;
+  $profileData = App\Models\User::find($id);
+@endphp
 <div class="col-md-3">
   <div class="osahan-account-page-left shadow-sm rounded bg-white h-100">
     <div class="border-bottom p-4">
       <div class="osahan-user text-center">
         <div class="osahan-user-media">
-          <img class="mb-3 rounded-pill shadow-sm mt-1" src="img/user/4.png" alt="gurdeep singh osahan">
+          <img id="showImageSidebar" src="{{ !empty($profileData->photo)
+    ? asset('storage/' . $profileData->photo)
+    : asset('upload/no_image.jpg') }}" alt="" class="rounded-circle p-1 bg-primary" width="110">
           <div class="osahan-user-media-body">
-            <h6 class="mb-2">Gurdeep Singh</h6>
-            <p class="mb-1">+91 85680-79956</p>
-            <p>iamosahan@gmail.com</p>
-            <p class="mb-0 text-black font-weight-bold"><a class="text-primary mr-3" data-toggle="modal"
-                data-target="#edit-profile-modal" href="#"><i class="icofont-ui-edit"></i> EDIT</a></p>
+            <h6 class="mb-2">{{ $profileData->name }}</h6>
+            <p class="mb-1">{{ $profileData->phone }}</p>
+            <p>{{ $profileData->email }}</p>
           </div>
         </div>
       </div>
     </div>
     <ul class="nav nav-tabs flex-column border-0 pt-4 pl-4 pb-4" id="myTab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" href="{{ route('dashboard') }}" role="tab" aria-controls="orders"
+        <a class="nav-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }}" href="{{ route('user.dashboard') }}" role="tab" aria-controls="orders"
           aria-selected="true"><i class="icofont-food-cart"></i> Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('user.change_password') ? 'active' : '' }}" href="{{ route('user.change_password') }}" role="tab" aria-controls="orders"
+          aria-selected="true"><i class="icofont-food-cart"></i> Change Password</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders"
