@@ -6,6 +6,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
 {
@@ -59,6 +60,83 @@ class ClientController extends Controller
     }
 
     public function ClientDashboard() {
-        return view('client.client_dashboard');
+        return view('client.index');
+    }
+
+    public function ClientProfile() {
+        $id = Auth::guard('client')->id();
+        $profileData = Client::find($id);
+        return view('client.client_profile', compact('profileData'));
+    }
+
+    public function ClientProfileUpdate(Request $request) {
+        $id = Auth::guard('client')->id();
+        $data = client::findOrFail($id);
+
+        // update field basic
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->address = $request->address;
+
+        // simpan nama file lama
+        $oldPhotoPath = $data->photo;
+
+        if ($request->hasFile('photo')) {
+            // simpan ke storage/app/public/client_images
+            $path = $request->file('photo')->store('client_images', 'public');
+
+            // update field di database
+            $data->photo = $path;
+
+            // hapus foto lama kalau ada
+            if ($oldPhotoPath && Storage::disk('public')->exists($oldPhotoPath)) {
+                Storage::disk('public')->delete($oldPhotoPath);
+            }
+        }
+
+        $data->save();
+        $notification = [
+            'message'    => 'Profile updated successfully',
+            'alert_type' => 'success',
+        ];
+        return redirect()->back()->with($notification);
+    }
+
+    public function ClientChangePassword() {
+        $id = Auth::guard('client')->id();
+        $profileData = Client::find($id);
+        return view('client.client_change_password', compact('profileData'));
+    }
+
+    public function ClientPasswordUpdate(Request $request) {
+        $client = Auth::guard('client')->user();
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|confirmed',
+        ]);
+
+        if (!Hash::check($request->old_password, $client->password)) {
+            $notification = [
+                'message'    => 'Old Password Does Not Match!',
+                'alert_type' => 'error',
+            ];
+            return redirect()->back()->with($notification);
+        }
+
+        Client::whereId($client->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        $notification = [
+            'message'    => 'Password Change Successfully!',
+            'alert_type' => 'success',
+        ];
+        return redirect()->back()->with($notification);
+    }
+
+    public function ClientLogout() {
+        Auth::guard('client')->logout();
+        return redirect()->route('client.login')->with('success', 'Logout Successfully');
     }
 }
