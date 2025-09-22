@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
@@ -40,6 +41,7 @@ Route::middleware('admin')->group(function () {
     Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
     Route::post('/admin/password/update', [AdminController::class, 'AdminPasswordUpdate'])->name('admin.password.update');
+
 });
 
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login');
@@ -68,3 +70,11 @@ Route::middleware('client')->group(function () {
 
 Route::get('/client/logout', [ClientController::class, 'ClientLogout'])->name('client.logout');
 
+Route::middleware('admin')->group(function () {
+    Route::controller(CategoryController::class)->group(function(){
+        Route::get('/all/category', 'AllCategory')->name('all.categories');
+        Route::get('/add/category', 'AddCategory')->name('add.categories');
+        Route::post('/store/category', 'StoreCategory')->name('store.category');
+
+    });
+});
