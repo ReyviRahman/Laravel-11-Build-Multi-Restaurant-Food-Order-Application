@@ -49,4 +49,51 @@ class CategoryController extends Controller
 
         return redirect()->route('all.categories')->with($notification);
     }
+
+    public function EditCategory($id) {
+        $category = Category::find($id);
+        return view('admin.backend.category.edit_category', compact('category'));
+    }
+
+    public function UpdateCategory(Request $request) {
+        $cat_id = $request->id;
+
+        $category = Category::findOrFail($cat_id);
+
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $manager = new ImageManager(new Driver());
+
+            // Generate nama unik
+            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+
+            // Resize gambar
+            $img = $manager->read($image)->resize(300, 300);
+
+            // Simpan ke storage/app/public/category
+            $path = 'category_images/' . $name_gen;
+            if ($category->image && Storage::disk('public')->exists($category->image)) {
+                Storage::disk('public')->delete($category->image);
+            }
+
+            Storage::disk('public')->put($path, (string) $img->encode());
+
+            // Simpan path ke DB
+            $category->update([
+                'category_name' => $request->category_name,
+                'image' => $path, 
+            ]);
+        } else {
+            $category->update([
+                'category_name' => $request->category_name
+            ]);
+        }
+
+        $notification = [
+            'message' => 'Category Updated Successfully',
+            'alert_type' => 'success'
+        ];
+
+        return redirect()->route('all.categories')->with($notification);
+    }
 }
