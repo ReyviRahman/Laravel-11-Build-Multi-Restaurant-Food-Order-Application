@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -79,4 +79,10 @@ Route::middleware('admin')->group(function () {
         Route::put('/update/category','UpdateCategory')->name('update.category');
         Route::delete('/delete/category/{id}', 'DeleteCategory')->name('delete.category');
     });
+
+    Route::prefix('admin')->group(function () {
+        Route::resource('cities', CityController::class)->only(['index', 'store', 'update', 'destroy']);
+    });
+
 });
+
