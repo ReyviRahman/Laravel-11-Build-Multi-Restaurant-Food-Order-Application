@@ -41,7 +41,11 @@
                     <td><img src="{{ asset('storage/'.$item->image) }}" alt="" style="width: 70px; height: 40px;"></td>
                     <td>
                       <a href="{{ route('edit.category', $item->id) }}" class="btn btn-info waves-effect waves-light">Edit</a>
-                      <a href="" class="btn btn-danger waves-effect waves-light">Delete</a>
+                      <button type="button" class="btn btn-danger waves-effect waves-light" data-id="{{ $item->id }}">Delete</button>
+                      <form id="delete-form-{{ $item->id }}" action="{{ route('delete.category', $item->id) }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('DELETE')
+                      </form>
                     </td>
                   </tr>
                   @endforeach
@@ -58,3 +62,33 @@
     </div> <!-- container-fluid -->
   </div>
 @endsection
+
+@section('script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-danger').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const categoryId = this.getAttribute('data-id');
+            Swal.fire({
+                title: 'Yakin mau hapus?',
+                text: "Data yang sudah dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + categoryId).submit();
+                }
+            });
+        });
+    });
+});
+</script>
+@endsection
+
+
+

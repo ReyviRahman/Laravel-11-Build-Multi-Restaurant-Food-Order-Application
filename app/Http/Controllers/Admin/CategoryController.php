@@ -96,4 +96,20 @@ class CategoryController extends Controller
 
         return redirect()->route('all.categories')->with($notification);
     }
+
+    public function DeleteCategory($id) {
+        $category = Category::findOrFail($id);
+        if ($category->image && Storage::disk('public')->exists($category->image)) {
+            Storage::disk('public')->delete($category->image);
+        }
+
+        $category->delete();
+
+        $notification = [
+            'message' => 'Category Deleted Successfully',
+            'alert_type' => 'success'
+        ];
+
+        return redirect()->route('all.categories')->with($notification);
+    }
 }
