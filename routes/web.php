@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\RestaurantController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
@@ -89,5 +90,6 @@ Route::middleware('admin')->group(function () {
 Route::middleware('client')->group(function () {
     Route::prefix('client')->group(function () {
         Route::resource('menus', RestaurantController::class)->except(['show']);
+        Route::resource('products', ProductController::class)->except(['show']);
     });
 });

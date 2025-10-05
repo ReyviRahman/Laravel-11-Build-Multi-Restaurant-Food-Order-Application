@@ -18,7 +18,7 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
-                        <i data-feather="grid"></i>
+                        <i class="bx bxs-food-menu"></i>
                         <span data-key="t-apps">Menu</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
@@ -29,8 +29,28 @@
                         </li>
 
                         <li>
-                            <a href="apps-chat.html">
+                            <a href="{{ route('menus.create') }}">
                                 <span data-key="t-chat">Add Menu</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="mdi mdi-food-turkey"></i>
+                        <span data-key="t-apps">Product</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li>
+                            <a href="{{ route('products.index') }}">
+                                <span data-key="t-calendar">All Product</span>
+                                
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('products.create') }}">
+                                <span data-key="t-chat">Add Product</span>
                             </a>
                         </li>
                     </ul>
